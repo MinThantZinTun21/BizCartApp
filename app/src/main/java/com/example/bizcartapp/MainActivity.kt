@@ -1,46 +1,45 @@
 package com.example.bizcartapp
 
 import android.os.Bundle
-import android.provider.CalendarContract.Colors
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CardElevation
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.bizcartapp.ui.theme.BizCartAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -59,6 +58,8 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun CreateBizCard() {
+    val buttonClickState = remember { mutableStateOf(false) }
+
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -85,7 +86,35 @@ fun CreateBizCard() {
                 Divider(
                     thickness = 1.dp, color = Color.Gray, modifier = Modifier.padding(top = 28.dp)
                 )
-                InfoView()
+                Column(
+                    modifier = Modifier.padding(10.dp)
+                ) {
+                    Text(
+                        text = "Min Thant zin tun ",
+                        style = MaterialTheme.typography.headlineMedium,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    Text(
+                        text = "I am android develper @ \n company with 10 year experience ",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Button(onClick = {
+                        buttonClickState.value = buttonClickState.value.not()
+                    }) {
+                        Text(text = "Profile Button")
+                    }
+
+
+                }
+                if (buttonClickState.value) {
+                    Content()
+                } else {
+                    Box {
+
+                    }
+                }
+
             }
 
         }
@@ -110,7 +139,7 @@ fun Content() {
             shape = RoundedCornerShape(8.dp),
             border = BorderStroke(1.dp, color = Color.Gray)
         ) {
-            Profolio(arrayListOf("Profolio", "Profolio", "Profolio"))
+            Porfolio(arrayListOf("Profolio 1", "Profolio2", "Profolio 3"))
 
         }
     }
@@ -118,39 +147,48 @@ fun Content() {
 }
 
 @Composable
-private fun Profolio(data: List<String>) {
-    LazyColumn() {
-        item(data) {
-            Text(text = "Profolio")
+private fun Porfolio(data: List<String>) {
+    LazyColumn {
+        items(data) {
+            Card(
+                modifier = Modifier
+                    .padding(6.dp)
+                    .fillMaxWidth(), shape = RectangleShape
+            ) {
+                Row(
+                    modifier = Modifier.background(MaterialTheme.colorScheme.surface)
+                ) {
+                    Surface(
+                        modifier = Modifier.size(56.dp), shape = CircleShape
+                    ) {
+                        ProfileImage()
+
+
+                    }
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 12.dp, start = 12.dp)
+                    ) {
+                        Text(
+                            text = it,
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = "Project Description is Here ",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                }
+
+            }
+
 
         }
 
-
     }
 
-}
-
-@Composable
-private fun InfoView() {
-    Column(
-        modifier = Modifier.padding(10.dp)
-    ) {
-        Text(
-            text = "Min Thant zin tun ",
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.primary
-        )
-        Text(
-            text = "I am android develper @ \n company with 10 year experience ",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface
-        )
-        Button(onClick = {}) {
-            Text(text = "Profile Button")
-        }
-
-
-    }
 }
 
 @Composable
